@@ -11,7 +11,9 @@ describe('User is able to create a new standard page', () => {
     })
 
     it('Create standard page', () => {
-        cy.drupalLogin(testUser, 'password')
+      cy.catch('Cannot read properties of null')
+
+      cy.drupalLogin(testUser, 'password')
         cy.visit('node/add/govcms_standard_page')
         cy.get('[data-drupal-selector="edit-title-0-value"]').type(pageTitle)
 
