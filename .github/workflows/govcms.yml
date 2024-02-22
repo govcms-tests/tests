@@ -15,6 +15,7 @@ jobs:
 
     container:
       image: govcmstesting/ci:8.2-nginx
+      options: --user govcms:govcms
       env:
         GOVCMS_TESTS_VERSION: ""
         COMPOSER_HOME: /home/govcms/.cache/composer
@@ -26,12 +27,12 @@ jobs:
 
     - uses: actions/checkout@v4
       with:
-        path: '/app/tests'
+        path: 'tests'
 
     - name: Install dependencies
       run: |
-        cd /app/tests/cy && npm ci
+        cd tests/cy && npm ci
 
     - name: Run Cypress tests
       run: |
-        cd /app/tests/cy && npx cypress run --env drupalDrushCmdLine="/app/bin/drush --root=/app/web %command"
+        cd tests/cy && npx cypress run --env drupalDrushCmdLine="/app/bin/drush --root=/app/web %command"
