@@ -20,13 +20,13 @@ jobs:
         COMPOSER_HOME: /home/govcms/.cache/composer
        
     steps:
-    - name: Start GovCMS
-      run: |
-       govcms start
-
     - uses: actions/checkout@v4
       with:
         path: 'tests'
+
+    - name: Start GovCMS
+      run: |
+       govcms start
 
     - name: Install dependencies
       run: |
