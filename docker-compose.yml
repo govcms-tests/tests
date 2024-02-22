@@ -32,12 +32,8 @@ services:
     ports:
       - "8888:80"
     volumes:
-      - $PWD/app/modules:/app/web/modules/develop
-      - $PWD/app/themes:/app/web/themes/develop
-      - /var/www/html/sites
-      - $PWD/behat:/app/tests/behat
-      - $PWD/cy:/app/tests/cy
-      - $PWD/phpunit:/app/tests/phpunit
+      - /app/web/sites
+      - /home/govcms/.cache/composer
     develop:
       watch:
         - action: sync
@@ -51,7 +47,7 @@ services:
   # mariadb: The database used by local
   ##########################################
   mariadb:
-    image: mariadb:latest
+    image: mariadb:lts
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: drupal

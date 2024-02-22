@@ -2,67 +2,68 @@
 ahoyapi: v2
 
 commands:
+
+  # Docker Compose commands
   up:
-    usage: Build project.
-    cmd: |
-      docker compose up -d "$@"
+    usage: Build and start project containers.
+    cmd: docker compose up -d "$@"
 
   down:
-    usage: Delete project.
+    usage: Stop and remove project containers.
     cmd: docker compose down
 
   build:
-    usage: Build project.
-    cmd: |
-      docker compose build "$@"
+    usage: Build project containers.
+    cmd: docker compose build "$@"
 
   restart:
-    usage: Restart Docker containers.
+    usage: Restart project containers.
     cmd: docker compose restart
 
   stop:
-    usage: Stop Docker containers.
+    usage: Stop project containers.
     cmd: docker compose stop "$@"
 
+  # Development commands
   watch:
     usage: Use Compose Watch for live development.
     cmd: docker compose watch
 
   cli:
-    usage: Start a shell.
+    usage: Start a shell inside the 'govcms' container.
     cmd: docker compose exec govcms bash
 
   composer:
-    usage: Start a composer command.
+    usage: Run Composer commands inside the 'govcms' container.
     cmd: docker compose exec govcms composer "$@"
 
   rector:
-    usage: Analyze your code with Rector and review suggested changes.
+    usage: Analyze code with Rector and review suggested changes inside the 'govcms' container.
     cmd: docker compose exec govcms rector "$@"
 
   phpunit:
-    usage: Run PHPUnit tests.
+    usage: Run PHPUnit tests inside the 'govcms' container.
     cmd: docker compose exec govcms phpunit "$@"
 
   drupal-check:
-    usage: Static analysis tool to check for correctness and deprecation errors.
+    usage: Check code correctness and deprecation errors inside the 'govcms' container.
     cmd: docker compose exec govcms drupal-check "$@"
 
+  # Cypress commands
   cypress:
-    usage: Run all Cypress tests
+    usage: Run Cypress tests.
     cmd: |
-      cd cy
+      cd cy && npm install
       export CYPRESS_BASE_URL=http://localhost:8888
       npx cypress run "cypress/e2e/*" --env drupalDrushCmdLine="docker compose exec govcms drush %command"
 
   cr:
-    usage: Alias for 'cypress'
-    cmd: |
-      ahoy cypress
+    usage: Alias for 'cypress'.
+    cmd: ahoy cypress
 
   co:
-    usage: Open a new Cypress testing window
+    usage: Open a new Cypress testing window.
     cmd: |
-      cd cy
+      cd cy && npm install
       export CYPRESS_BASE_URL=http://localhost:8888
       npx cypress open --env drupalDrushCmdLine="docker compose exec govcms drush %command"

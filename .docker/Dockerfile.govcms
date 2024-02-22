@@ -1,28 +1,16 @@
-# Stage 1: Base image
-FROM govcms/govcms:10.x-latest as base
+FROM govcmstesting/ci:8.2-nginx
 
-# Copy core files and configuration from the "govcms/govcms" image
-COPY --from=drupal:10.1-php8.1-apache /opt/drupal/web/core/install.php /app/web/core/install.php
+# Set environment variable
+ENV GOVCMS_TESTS_VERSION=""
+ENV CI=0
 
-# Stage 2: Final image
-FROM govcmstesting/ci:8.2-apache
+# Run govcms setup command
+RUN govcms setup && govcms install
 
-# Copy contents from the "base" stage to "/app/"
-COPY --from=base /app /app
+# Copy test-related files
+COPY --from=govcms.ops/tests --chown=govcms:govcms /tests /app/tests
 
-# Copy test-related files from the  "base" stage to "/app/tests"
-COPY --from=govcms.ops/tests /tests /app/tests
+WORKDIR /app
 
-# Customize Drupal installation
-RUN set -eux; \
-    rm -rf /var/www/html; \
-    ln -sf /app/web /var/www/html; \
-    mkdir -p /app/config/default; \
-    chown -R www-data:www-data /app/web/sites;
-
-# Set environment variables
-ENV SIMPLETEST_BASE_URL="http://localhost"
-ENV SIMPLETEST_DB='mysql://drupal:drupal@mariadb/drupal'
-
-# Set the working directory to "/app/"
-WORKDIR /app/
+# Run govcms start command when the container starts
+CMD ["govcms", "start"]
