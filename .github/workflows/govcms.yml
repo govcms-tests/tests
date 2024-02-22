@@ -26,7 +26,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        whoami
+        sudo npm cache clean --force 
         cd /app/tests/cy && npm ci
 
     - name: Run Cypress tests
