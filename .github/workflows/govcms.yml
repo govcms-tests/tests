@@ -20,18 +20,18 @@ jobs:
         COMPOSER_HOME: /home/govcms/.cache/composer
        
     steps:
-    - uses: actions/checkout@v4
-      with:
-        path: 'tests'
-
     - name: Start GovCMS
       run: |
        govcms start
 
+    - uses: actions/checkout@v4
+      with:
+        path: '/app/tests'
+
     - name: Install dependencies
       run: |
-        cd tests/cy && npm ci
+        cd /app/tests/cy && npm ci
 
     - name: Run Cypress tests
       run: |
-        cd tests/cy && npx cypress run --env drupalDrushCmdLine="/app/bin/drush --root=/app/web %command"
+        cd /app/tests/cy && npx cypress run --env drupalDrushCmdLine="/app/bin/drush --root=/app/web %command"
