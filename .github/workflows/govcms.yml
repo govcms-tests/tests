@@ -19,6 +19,7 @@ jobs:
       env:
         COMPOSER_HOME: /home/govcms/.cache/composer
         npm_config_cache: /home/govcms/.cache/npm
+        CYPRESS_CACHE_FOLDER: /home/govcms/.cache/cypress
        
     steps:
     - name: Start GovCMS
@@ -27,7 +28,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm cache clean --force
         cd /app/tests/cy && npm ci
 
     - name: Run Cypress tests
