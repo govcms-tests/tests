@@ -17,6 +17,7 @@ jobs:
       image: govcmstesting/ci:8.2-nginx
       env:
         GOVCMS_TESTS_VERSION: ""
+        COMPOSER_HOME: /home/govcms/.cache/composer
        
     steps:
     - name: Start GovCMS
