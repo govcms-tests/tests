@@ -25,6 +25,9 @@ jobs:
       run: |
        govcms start
 
+    - name: Change directory ownership
+      run: sudo chown -R govcms:govcms $GITHUB_WORKSPACE
+
     - uses: actions/checkout@v4
       with:
         path: 'tests'
