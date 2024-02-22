@@ -13,24 +13,14 @@ jobs:
   cypress:
     runs-on: ubuntu-latest
 
-    container:
-      image: govcmstesting/ci:8.2-nginx
-      options: --user govcms:govcms
-      env:
-        COMPOSER_HOME: /home/govcms/.cache/composer
-        npm_config_cache: /home/govcms/.cache/npm
-        CYPRESS_CACHE_FOLDER: /home/govcms/.cache/cypress
-        HOME: /home/govcms
-       
+    services:
+      govcms:
+        image: govcmsextras/php:8.2-nginx
+
     steps:
-    - name: Start GovCMS
-      run: |
-       govcms start
-
-    - name: Install dependencies
-      run: |
-        cd /app/tests/cy && npm ci
-
-    - name: Run Cypress tests
-      run: |
-        cd /app/tests/cy && npx cypress run --env drupalDrushCmdLine="/app/bin/drush --root=/app/web %command"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          project: ./cy
