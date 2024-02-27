@@ -5,6 +5,8 @@ describe('Site admin can create a view', () => {
 
     it('Log the user in then create a new view', () => {
         cy.drupalLogin()
+
+        //Create view [@cypresstest]-view
         cy.visit('/admin/structure/views')
         cy.get('.button')
             .click({force: true})
@@ -19,6 +21,8 @@ describe('Site admin can create a view', () => {
         cy.get('.messages-list__item')
             .contains('The view [@cypresstest]-view has been saved')
         cy.visit('/-cypresstest--view')
+
+        //Delete view [@cypresstest]-view
         cy.visit('/admin/structure/views/view/_cypresstest_view/delete?destination=/admin/structure/views')
         cy.get('#edit-submit')
             .click({force: true})

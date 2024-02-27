@@ -132,6 +132,44 @@ Cypress.Commands.add("uninstall", (module) => {
     cy.execDrush(`-y pm:uninstall ${module}`)
 })
 
+Cypress.Commands.add("createTestUser", (testUser) => {
+    cy.execDrush(`ucrt ${testUser} --password=password`)
+    cy.execDrush(`user:role:add govcms_content_author ${testUser}`)
+})
+
+Cypress.Commands.add("removeTestFiles", () => {
+    // Remove all test files
+    cy.drupalLogin()
+    cy.visit('admin/content/media')
+    cy.get('.select-all > .form-checkbox').check()
+    cy.get('#edit-action').select('media_delete_action')
+    cy.get('#edit-submit').click()
+    cy.get('#edit-also-delete-file').check()
+    cy.confirm()
+
+})
+
+Cypress.Commands.add("deleteBlock", () => {
+    // Delete block, generated with Cypress Studio
+    cy.visit('admin/content/block')
+    cy.get(':nth-child(1) > .views-field-operations > .dropbutton-wrapper > .dropbutton-widget > .dropbutton > .dropbutton-toggle > .dropbutton__toggle').click();
+    cy.get(':nth-child(1) > .views-field-operations > .dropbutton-wrapper > .dropbutton-widget > .dropbutton > .delete > .use-ajax').click();
+    cy.get('.ui-dialog-buttonset > .button--primary').click();
+
+})
+
+
+Cypress.Commands.add("ckeditorType", () => {
+    // Type into CKEditor, cy.type() doesn't currently work with CKEditor
+    cy.get('.ck-content[contenteditable=true]').then(el => {
+        const editor = el[0].ckeditorInstance;
+        editor.setData('Typing some stuff');
+    });
+
+})
+
+ 
+
 
 export function randString(length) {
     return (Math.random() + 1).toString(36).substring(2, length + 2)
