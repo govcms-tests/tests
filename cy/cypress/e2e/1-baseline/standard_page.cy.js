@@ -6,8 +6,7 @@ const testUser = randString(10)
 describe('User is able to create a new standard page', () => {
 
     it('Create test user', () => {
-        cy.execDrush(`ucrt ${testUser} --password=password`)
-        cy.execDrush(`user:role:add govcms_content_author ${testUser}`)
+        cy.createTestUser(testUser);
     })
 
     it('Create standard page', () => {
@@ -15,10 +14,7 @@ describe('User is able to create a new standard page', () => {
         cy.visit('node/add/govcms_standard_page')
         cy.get('[data-drupal-selector="edit-title-0-value"]').type(pageTitle)
 
-        cy.get('.ck-content[contenteditable=true]').then(el => {
-            const editor = el[0].ckeditorInstance
-            editor.setData('Typing some stuff')
-        })
+        cy.ckeditorType();
 
         cy.get('[data-drupal-selector="edit-moderation-state-0-state"]').select('needs_review')
 

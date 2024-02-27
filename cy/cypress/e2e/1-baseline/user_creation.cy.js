@@ -27,6 +27,8 @@ describe('User can create a new user with a role', () => {
 Cypress.Commands.add('checkUserCreation', (userrole, testRole) => {
     let password = 'DY+T5R9K09+pRy84wZvlF4PjrBzGEXcRDA/NEV6B8/I='
     cy.userLogin(testRole).then(() => {
+
+        //creating user account
         cy.get('#toolbar-link-entity-user-collection')
             .click({force: true})
         cy.get('.local-actions__item > .button')
@@ -43,6 +45,7 @@ Cypress.Commands.add('checkUserCreation', (userrole, testRole) => {
             .click({force: true})
         cy.execDrush(`user:information ${testName} | grep ${testName}`)
 
+        //Setting user role for account
         cy.get('#toolbar-link-entity-user-collection')
             .click({force: true})
         cy.get('#edit-user-bulk-form-0')
@@ -51,6 +54,8 @@ Cypress.Commands.add('checkUserCreation', (userrole, testRole) => {
             .select('Add the ' + userrole + ' role to the selected user(s)')
         cy.get('#edit-submit')
             .click({force: true})
+
+        //Deleting user account and its content 
         cy.get('#edit-user-bulk-form-0')
             .click({force: true})
         cy.get('#edit-action')
