@@ -11,6 +11,7 @@ describe('Site admin can create a view', () => {
         cy.drupalLogin()
         cy.visit('/admin/structure/views/add')
         cy.getDrupal('edit-label').type(`${viewName}`, {force: true})
+      cy.wait(500)
         cy.getDrupal('edit-id').type(`${viewName}`, {force: true})
         cy.getDrupal('edit-page-create').click({force: true})
         cy.confirm()
