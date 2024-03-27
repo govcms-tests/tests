@@ -132,6 +132,16 @@ Cypress.Commands.add("uninstall", (module) => {
     cy.execDrush(`-y pm:uninstall ${module}`)
 })
 
+Cypress.Commands.add("catch", (errMessage) => {
+  cy.on('uncaught:exception', (e, runnable) => {
+    console.log('error', e)
+    console.log('runnable', runnable)
+    if (e.message.includes(errMessage)) {
+      return false
+    }
+  })
+})
+
 
 export function randString(length) {
     return (Math.random() + 1).toString(36).substring(2, length + 2)

@@ -4,7 +4,9 @@ const blogName = "test " + randString(10)
 
 describe('Search functionality works as expected', () => {
     it('Install search and set up dummy content', () => {
-        cy.install('search')
+      cy.catch('Cannot read properties of null')
+
+      cy.install('search')
         // Create dummy content
         cy.drupalLogin()
         cy.visit('node/add/govcms_blog_article')

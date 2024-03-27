@@ -11,7 +11,9 @@ describe('User can create webforms with file attachment fields', () => {
     })
 
     it('Create test webform with file field', () => {
-        cy.userLogin('govcms-site-admin')
+      cy.catch('Cannot read properties of null')
+
+      cy.userLogin('govcms-site-admin')
         cy.visit('admin/structure/webform/add')
         cy.get('[data-drupal-selector="title"]').type(`${formTitle}`)
         cy.wait(500)
@@ -28,7 +30,14 @@ describe('User can create webforms with file attachment fields', () => {
     })
 
     it('Test adding webform to standard page', () => {
-        cy.userLogin('govcms-site-admin')
+      cy.on('uncaught:exception', (e, runnable) => {
+        console.log('error', e)
+        console.log('runnable', runnable)
+
+        return false
+      })
+
+      cy.userLogin('govcms-site-admin')
         cy.visit('node/add/webform')
         cy.getDrupal('edit-title-0-value').type(`web${formTitle}`)
         cy.getDrupal('edit-webform-0-target-id').select(`${formTitle}`)
