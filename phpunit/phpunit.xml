@@ -37,7 +37,10 @@
       <directory>/app/web/themes</directory>
     </testsuite>
     <testsuite name="govcms-integration">
-      <directory>/app/tests/phpunit/integration</directory>
+      <directory>/app/tests/phpunit/integration/GovCMS</directory>
+    </testsuite>
+    <testsuite name="govcms-integration-canary">
+      <directory>/app/tests/phpunit/integration/Canary</directory>
     </testsuite>
     <testsuite name="govcms">
       <directory>/app/tests/phpunit/tests</directory>

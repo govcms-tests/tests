@@ -17,6 +17,12 @@
         "phploc/phploc": "^7.0",
         "phpmd/phpmd": "^2.10"
     },
+    "autoload": {
+        "psr-4": {
+            "GovCMS\\Tests\\": ["phpunit/tests"],
+            "GovCMS\\Tests\\Integration\\": ["phpunit/integration"]
+        }
+    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
