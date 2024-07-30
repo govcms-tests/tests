@@ -40,7 +40,7 @@ jobs:
           php-version: '8.1' # specify the PHP version you need
 
       - name: Run PHP script to generate Markdown
-        run: php phpunit/extract.php /home/runner/work/tests/tests/phpunit/integration/GovCMS
+        run: php phpunit/extract.php ${{ github.workspace }}/phpunit/integration/GovCMS
 
       - name: Commit and push changes
         run: |
