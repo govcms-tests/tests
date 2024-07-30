@@ -40,13 +40,14 @@ jobs:
           php-version: '8.1' # specify the PHP version you need
 
       - name: Run PHP script to generate Markdown
-        run: php phpunit/extract.php /home/runner/work/govcms-tests/govcms-tests/phpunit/integration/GovCMS
+        run: php phpunit/extract.php /home/runner/work/tests/tests/phpunit/integration/GovCMS
 
       - name: Commit and push changes
         run: |
+          mkdir -p ${{ github.workspace }}/phpunit/docs
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add phpunit/docs/
+          git add ${{ github.workspace }}/phpunit/docs/
           git commit -m "Update generated docs"
           git push
         env:

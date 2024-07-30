@@ -5,7 +5,6 @@ commands:
   up:
     usage: Build project.
     cmd: |
-      ahoy start-services
       docker compose up -d "$@"
 
   down:

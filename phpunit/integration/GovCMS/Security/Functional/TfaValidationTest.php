@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GovCMS\Tests\Security\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Security\Functional;
 
 use Drupal\Tests\tfa\Functional\TfaTestBase;
 use Drupal\user\Entity\User;

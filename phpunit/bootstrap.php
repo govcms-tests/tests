@@ -140,8 +140,11 @@ function drupal_phpunit_populate_class_loader() {
   // Add multiple paths for GovCMS\Tests
   $loader->addPsr4('GovCMS\\Tests\\', [
     '/app/tests/phpunit/tests',
-    '/app/tests/phpunit/integration',
-    '/app/tests/phpunit/integration/GovCMS'
+  ]);
+
+  // Add a separate path for GovCMS\Tests\Integration
+  $loader->addPsr4('GovCMS\\Tests\\Integration\\', [
+      '/app/tests/phpunit/integration'
   ]);
 
   if (!isset($GLOBALS['namespaces'])) {

@@ -1,5 +1,13 @@
+# Set the PHP and GovCMS versions as arguments
+ARG PHP_VERSION=8.3
+ARG GOVCMS_VERSION=10.x-latest
+ARG DRUPAL_VERSION=10.2
+
 # Stage 1: Web image
-FROM govcmstesting/ci:8.3-apache AS web
+FROM govcms/govcms:${GOVCMS_VERSION} AS govcms
+FROM govcmstesting/ci:latest-php${PHP_VERSION}-apache
+
+USER root
 
 # Install ssmtp and clean up
 RUN apt-get update && \
@@ -12,75 +20,49 @@ RUN echo "hostname=govcms.localhost" > /etc/ssmtp/ssmtp.conf && \
     echo "mailhub=mailhog:1025" >> /etc/ssmtp/ssmtp.conf && \
     echo "sendmail_path=/usr/sbin/ssmtp -t" >> /usr/local/etc/php/conf.d/docker-php-sendmail.ini
 
-# Customize Drupal installation
-RUN set -eux; \
-    rm -rf /var/www/html; \
-    mkdir -p /app/web/sites; \
-    ln -sf /app/web /var/www/html;
-
 # Set environment variables
 ENV SIMPLETEST_BASE_URL="http://localhost"
 ENV SIMPLETEST_DB='sqlite://sites/default/files/.ht.sqlite'
 # ENV SIMPLETEST_DB='mysql://drupal:drupal@mariadb/drupal'
 
 # Set the working directory to "/app/"
-WORKDIR /app/
-
-# Stage 2: Base image
-FROM govcms/govcms:10.x-beta AS base
-
-# Copy core files and configuration from the "govcms/govcms" image
-COPY --from=drupal:10.2-php8.3-apache /opt/drupal/web/core/install.php /app/web/core/install.php
-
-# Disable secure-http for Composer and modify composer.json using jq
-RUN composer config secure-http false && \
-    jq '.repositories |= [{"type": "composer", "url": "http://packeton"},{"type": "composer", "url": "http://packeton/mirror/drupal"},{"type": "composer", "url": "http://packeton/mirror/packagist"},{"packagist": false}] + .' composer.json > temp.json && \
-    mv temp.json composer.json
-
-# Set the working directory to "/app/tests/"
-WORKDIR /app/tests/
-
-# Copy only the necessary files for dependency installation
-COPY composer.json /app/tests/
-
-# Disable secure-http for Composer and modify composer.json using jq
-RUN composer config secure-http false && \
-    jq '.repositories |= [{"type": "composer", "url": "http://packeton"},{"type": "composer", "url": "http://packeton/mirror/drupal"},{"type": "composer", "url": "http://packeton/mirror/packagist"},{"packagist": false}] + .' composer.json > temp.json && \
-    mv temp.json composer.json
-
-# Copy test-related files from the  "base" stage to "/app/tests"
-COPY phpcs.xml phpcs.govcms.xml /app/tests/
-
-# Stage 3: Final image
-FROM web
-
 WORKDIR /app
 
-# Customize Drupal installation
-RUN set -eux; \
-    groupadd -r govcms && useradd -r -g govcms -G root,www-data govcms;
+# Copy govcms and test files with correct ownership
+COPY --chown=govcms:govcms --from=govcms /app /app
 
-# Customize Drupal installation
-RUN set -eux; \
-    mkdir -p /app/config/default; \
-    chown -R govcms:govcms /app/config; \
-    chown -R govcms:govcms /app/web/sites; \
-    mkdir -p /home/govcms; \
-    chown -R govcms:govcms /home/govcms;
-
-# Copy contents from the "base" stage to "/app/"
-COPY --from=base --chown=govcms:govcms /app /app
-
-# Copy the startup script to the image
-COPY --chown=govcms:govcms .docker/scripts/startup.sh /app/startup.sh
-COPY --chown=govcms:govcms .docker/scripts/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/startup.sh /app/entrypoint.sh
+# Add the install.php file from the Drupal repository
+ADD --chown=govcms:govcms https://github.com/drupal/drupal/raw/10.2.x/core/install.php /app/web/core/install.php
 
 # Switch to the govcms user
 USER govcms
 
-# Set the entrypoint to the custom entrypoint script
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Install PHP dependencies using Composer
+RUN --mount=type=cache,mode=0777,target=/root/.cache composer update --with-all-dependencies --optimize-autoloader
+
+# Stage 2: Build tests
+# Set the working directory
+WORKDIR /tests
+
+# Copy only necessary files and directories explicitly
+COPY behat/ behat/
+COPY cy/ cy/
+COPY phpunit/ phpunit/
+COPY phpcs.govcms.xml phpcs.govcms.xml
+COPY phpcs.xml phpcs.xml
+
+# Copy only the necessary files for dependency installation
+COPY composer.json .
+
+# Install PHP dependencies using Composer
+RUN --mount=type=cache,mode=0777,target=/root/.cache composer update --no-dev --optimize-autoloader
+
+# Stage 3: Final image
+# Set the working directory
+WORKDIR /app
+
+# Switch to the govcms user
+USER govcms
 
 # Default command (can be overridden by docker-compose)
 CMD ["apache2-foreground"]

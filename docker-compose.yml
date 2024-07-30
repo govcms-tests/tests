@@ -32,8 +32,8 @@ services:
       - "traefik.http.services.govcms.loadbalancer.server.port=80"
     networks:
       - internal
-      - govcms-local-services_web
-      - govcms-local-services_internal
+    ports:
+      - "0:80"
     develop:
       watch:
         - action: sync
@@ -46,21 +46,6 @@ services:
             - data/
         - action: rebuild
           path: composer.json
-
-  ##########################################
-  # cypress: Cypress testing service
-  ##########################################
-  cypress:
-    image: cypress/included
-    container_name: cypress
-    volumes:
-      - ./cy:/e2e
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    networks:
-      - internal
-    environment:
-      - CYPRESS_baseUrl=http://govcms
-    entrypoint: ["npx", "cypress", "run", "--project", "/e2e", "--spec", "/e2e/cypress/e2e/4-ui/*.cy.js"]
 
 volumes:
   modules:
@@ -75,12 +60,6 @@ volumes:
       type: none
       o: bind
       device: ./app/themes
-  drupal_sites:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./data/drupal_sites
   behat:
     driver: local
     driver_opts:
@@ -109,7 +88,3 @@ volumes:
 networks:
   internal:
     external: false
-  govcms-local-services_web:
-    external: true
-  govcms-local-services_internal:
-    external: true

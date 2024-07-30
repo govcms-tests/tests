@@ -1,6 +1,6 @@
 <?php
 
-namespace GovCMS\Tests\Modules\block_inactive_users\Kernel;
+namespace GovCMS\Tests\Integration\GovCMS\block_inactive_users\Kernel;
 
 use Drupal\Tests\block_inactive_users\Kernel\BlockUsersTest as BaseBlockUsersTest;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace GovCMS\Tests\Modules\Securitytxt\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Modules\Securitytxt\Functional;
 
-use GovCMS\Tests\Baseline\Functional\GovCMSTestBase;
+use GovCMS\Tests\Integration\GovCMS\Baseline\Functional\GovCMSTestBase;
 
 /**
  * Test GovCMS's custom Securitytxt requirements

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GovCMS\Tests\Baseline\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Baseline\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 
