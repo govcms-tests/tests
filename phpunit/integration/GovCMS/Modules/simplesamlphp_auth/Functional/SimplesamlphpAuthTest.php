@@ -30,6 +30,9 @@ class SimplesamlphpAuthTest extends GovCMSTestBase {
      * a new user with the necessary permissions and logs them in.
      */
     protected function setUp(): void {
+        // TODO: Remove this skip test once the module and configs are integrated into the distro.
+        $this->markTestSkipped();
+        
         parent::setUp();
 
         // Log out any currently logged-in user to ensure a clean state.
