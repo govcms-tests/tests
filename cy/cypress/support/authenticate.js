@@ -20,15 +20,18 @@ Cypress.Commands.add("drupalLogin", (user, password) => {
 
 // Drupal logout with confirmation.
 Cypress.Commands.add('drupalLogout', () => {
-    cy.request({
-        url: '/user/logout/confirm',
-        followRedirect: false,
-    }).then((res) => {
-        if (res.status === 200) {
-            cy.visit('/user/logout/confirm');
-            cy.get('#user-logout-confirm').submit();
-        } else {
-            cy.visit('/');
-        }
-    })
+    return cy.request('/user/logout');
+// TODO: replace the above with the below once GovCMS is 
+// back to using drupal >= 10.3.x
+//    cy.request({
+//        url: '/user/logout/confirm',
+//        followRedirect: false,
+//    }).then((res) => {
+//        if (res.status === 200) {
+//            cy.visit('/user/logout/confirm');
+//            cy.get('#user-logout-confirm').submit();
+//        } else {
+//            cy.visit('/');
+//        }
+//   })
 });
