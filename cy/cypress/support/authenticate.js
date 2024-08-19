@@ -18,20 +18,30 @@ Cypress.Commands.add("drupalLogin", (user, password) => {
     cy.get("#edit-submit").click()
 });
 
-// Drupal logout with confirmation.
 Cypress.Commands.add('drupalLogout', () => {
-    return cy.request('/user/logout');
-// TODO: replace the above with the below once GovCMS is 
-// back to using drupal >= 10.3.x
-//    cy.request({
-//        url: '/user/logout/confirm',
-//        followRedirect: false,
-//    }).then((res) => {
-//        if (res.status === 200) {
-//            cy.visit('/user/logout/confirm');
-//            cy.get('#user-logout-confirm').submit();
-//        } else {
-//            cy.visit('/');
-//        }
-//   })
+  cy.getDrupalVersion().then( (semver) => {
+    if (semver.stdout == '10.2.7') {
+      cy.visit('/user/logout');
+    } else {
+      cy.drupalLogoutConfirm();
+    }
+  })
 });
+
+Cypress.Commands.add('drupalLogoutConfirm', () => {
+    cy.request({
+        url: '/user/logout/confirm',
+        followRedirect: false,
+    }).then((res) => {
+        if (res.status === 200) {
+            cy.visit('/user/logout/confirm');
+            cy.get('#user-logout-confirm').submit();
+        } else {
+            cy.visit('/');
+        }
+   })
+})
+
+Cypress.Commands.add('getDrupalVersion', () => {
+  cy.execDrush("status | sed -nre 's/^Drupal version.* ([0-9]+\.[0-9]+\.[0-9]+)/\\1/p'")
+})
