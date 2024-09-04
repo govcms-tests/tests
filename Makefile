@@ -8,6 +8,7 @@ PHP_VERSIONS := 8.1 8.2 8.3
 
 # Supported architectures
 ARCHS := linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8
+CI_ARCHS := linux/amd64,linux/arm64
 
 # Target to create and use Buildx builder if it doesn't already exist
 buildx-setup:
@@ -38,7 +39,7 @@ endef
 
 # Apply make-targets for tests and ci with architectures
 $(eval $(call make-targets,tests,,, $(ARCHS)))
-$(eval $(call make-targets,ci,-apache,.ci, linux/amd64,linux/arm64))
+$(eval $(call make-targets,ci,-apache,.ci, $(CI_ARCHS)))
 
 # Aggregate targets
 tests: $(foreach v,$(PHP_VERSIONS),build-tests-$(v) test-tests-$(v))
