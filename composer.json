@@ -9,6 +9,7 @@
         "drevops/behat-screenshot": "^1.2",
         "drevops/behat-steps": "^2.1",
         "drupal/coder": "^8.3",
+        "drupal/core-dev": "^10.3",
         "drupal/drupal-extension": "^5.0",
         "mglaman/drupal-check": "^1.4",
         "palantirnet/drupal-rector": "^0.20",
@@ -19,7 +20,9 @@
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
         },
         "preferred-install": "dist",
         "secure-http": false,
