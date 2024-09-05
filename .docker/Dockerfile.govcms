@@ -66,7 +66,7 @@ RUN --mount=type=cache,mode=0777,target=/root/.cache composer update --with-all-
 
 # Stage 2: Build tests
 # Set the working directory
-WORKDIR /tests
+WORKDIR /app/tests
 
 # Copy only necessary files and directories explicitly
 COPY behat/ behat/
