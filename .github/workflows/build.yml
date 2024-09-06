@@ -3,7 +3,6 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ["3.x-develop"]
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
   schedule:
