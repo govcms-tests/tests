@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GovCMS\Tests\Security\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Security\Functional;
 
 use Drupal\Tests\tfa\Functional\TfaTestBase;
 use Drupal\user\Entity\User;
@@ -36,6 +36,12 @@ class TfaValidationTest extends TfaTestBase {
      */
     protected function setUp(): void {
         parent::setUp();
+
+        // HACK: for some reason, some of the modules included by GovCMS 
+        // do not integrate with each other, and cause these tests to fail
+        // unless we first rebuild the drupal container before 
+        // calling drupalLogin().
+        $this->drupalGet('/user');
 
         // create and log in as site admin user
         $this->adminUser = $this->drupalCreateUser([

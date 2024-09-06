@@ -1,10 +1,11 @@
+---
 name: Builder - PHP Composer
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
   pull_request:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
 
 permissions:
   contents: read

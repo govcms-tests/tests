@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace GovCMS\Tests\Security\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Security\Functional;
 
-use GovCMS\Tests\Baseline\Functional\GovCMSTestBase;
+use GovCMS\Tests\Integration\GovCMS\Baseline\Functional\GovCMSTestBase;
 
 /**
  * Test GovCMS's custom requirement that node authoring details are not shown

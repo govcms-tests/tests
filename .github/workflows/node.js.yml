@@ -1,10 +1,11 @@
+---
 name: Builder - Node.js
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
   pull_request:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
 
 jobs:
   build:
@@ -13,7 +14,8 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # See supported Node.js release schedule
+        # at https://nodejs.org/en/about/releases/
 
     steps:
       - uses: actions/checkout@v4

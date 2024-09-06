@@ -5,7 +5,6 @@ commands:
   up:
     usage: Build project.
     cmd: |
-      ahoy start-services
       docker compose up -d "$@"
 
   down:
@@ -82,7 +81,7 @@ commands:
     usage: Run all Cypress tests
     cmd: |
       cd cy
-      export CYPRESS_BASE_URL=http://govcms.localhost
+      export CYPRESS_BASE_URL=http://localhost:8888
       npx cypress run "cypress/e2e/*" --env drupalDrushCmdLine="docker compose exec govcms drush %command"
 
   cr:
@@ -94,7 +93,7 @@ commands:
     usage: Open a new Cypress testing window
     cmd: |
       cd cy
-      export CYPRESS_BASE_URL=http://govcms.localhost
+      export CYPRESS_BASE_URL=http://localhost:8888
       npx cypress open --env drupalDrushCmdLine="docker compose exec govcms drush %command"
 
   start-services:

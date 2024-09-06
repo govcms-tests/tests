@@ -1,104 +1,83 @@
-.PHONY: buildx-setup build-php81 build-php82 build-php83 build-ci-php81 build-ci-php82 build-ci-php83 test-php81 test-php82 test-php83 test-ci-php81 test-ci-php82 test-ci-php83 push-php81 push-php82 push-php83 push-ci-php81 push-ci-php82 push-ci-php83 php ci all release-php release-ci release-all
+.PHONY: buildx-setup build-php build-ci test-php test-ci push-php push-ci php ci all release-php release-ci release-all examples
 
 # Default version variable
 VERSION ?= latest
 
+# PHP versions
+PHP_VERSIONS := 8.1 8.2 8.3
+
+# Supported architectures
+ARCHS := linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8
+CI_ARCHS := linux/amd64,linux/arm64
+
 # Target to create and use Buildx builder if it doesn't already exist
 buildx-setup:
 	@echo "Setting up Docker Buildx"
-	@if [ -z "$$(docker buildx ls | grep govcms)" ]; then \
-		docker buildx create --name govcms --use; \
+	@if [ -z "$$(docker buildx ls | grep -w "govcms-tests" | head -n 1)" ]; then \
+		echo "Creating new builder: govcms-tests"; \
+		docker buildx create --name govcms-tests --use; \
 	else \
-		docker buildx use govcms; \
+		echo "Using existing builder: govcms-tests"; \
+		docker buildx use govcms-tests; \
 	fi
 	docker buildx inspect --bootstrap
 
-# Targets for building govcmstesting/tests images locally
-build-php81: buildx-setup
-	@echo "Building Docker image for govcmstesting/tests with PHP 8.1"
-	docker buildx build --load --build-arg PHP_VERSION=8.1 -t govcmstesting/tests:$(VERSION)-php8.1 -f Dockerfile .
+# Generic targets for building, testing, and pushing images
+define make-targets
+build-$(1)-%: buildx-setup
+	@echo "Building Docker image for govcmstesting/$(1) with PHP $$*"
+	docker buildx build --load --build-arg PHP_VERSION=$$* -t govcmstesting/$(1):$(VERSION)-php$$*$(2) -f $$(if $(filter $(1),ci),Dockerfile.ci,Dockerfile) .
 
-build-php82: buildx-setup
-	@echo "Building Docker image for govcmstesting/tests with PHP 8.2"
-	docker buildx build --load --build-arg PHP_VERSION=8.2 -t govcmstesting/tests:$(VERSION)-php8.2 -f Dockerfile .
+test-$(1)-%:
+	@echo "Testing Docker image for govcmstesting/$(1) with PHP $$*"
+	$$(if $(filter $(1),ci),docker run --rm govcmstesting/$(1):$(VERSION)-php$$*$(2) php -v,@echo "Skipping test for govcmstesting/$(1) with PHP $$*")
 
-build-php83: buildx-setup
-	@echo "Building Docker image for govcmstesting/tests with PHP 8.3"
-	docker buildx build --load --build-arg PHP_VERSION=8.3 -t govcmstesting/tests:$(VERSION)-php8.3 -f Dockerfile .
+push-$(1)-%: buildx-setup
+	@echo "Pushing Docker image for govcmstesting/$(1) with PHP $$*"
+	docker buildx build --push --build-arg PHP_VERSION=$$* --platform $(4) -t govcmstesting/$(1):$(VERSION)-php$$*$(2) $$(if $(filter $(1),tests),-t govcmstesting/$(1):latest-php$$*) -f $$(if $(filter $(1),ci),Dockerfile.ci,Dockerfile) .
+endef
 
-# Targets for building govcmstesting/ci images locally
-build-ci-php81: buildx-setup
-	@echo "Building Docker image for govcmstesting/ci with PHP 8.1"
-	docker buildx build --load --build-arg PHP_VERSION=8.1 -t govcmstesting/ci:$(VERSION)-php8.1-apache -f Dockerfile.ci .
-
-build-ci-php82: buildx-setup
-	@echo "Building Docker image for govcmstesting/ci with PHP 8.2"
-	docker buildx build --load --build-arg PHP_VERSION=8.2 -t govcmstesting/ci:$(VERSION)-php8.2-apache -f Dockerfile.ci .
-
-build-ci-php83: buildx-setup
-	@echo "Building Docker image for govcmstesting/ci with PHP 8.3"
-	docker buildx build --load --build-arg PHP_VERSION=8.3 -t govcmstesting/ci:$(VERSION)-php8.3-apache -f Dockerfile.ci .
-
-# Targets for skipping tests on govcmstesting/tests images
-test-php81:
-	@echo "Skipping test for govcmstesting/tests with PHP 8.1"
-
-test-php82:
-	@echo "Skipping test for govcmstesting/tests with PHP 8.2"
-
-test-php83:
-	@echo "Skipping test for govcmstesting/tests with PHP 8.3"
-
-# Targets for testing the built images (only for ci images)
-test-ci-php81:
-	@echo "Testing Docker image for govcmstesting/ci with PHP 8.1"
-	docker run --rm govcmstesting/ci:$(VERSION)-php8.1-apache php -v
-
-test-ci-php82:
-	@echo "Testing Docker image for govcmstesting/ci with PHP 8.2"
-	docker run --rm govcmstesting/ci:$(VERSION)-php8.2-apache php -v
-
-test-ci-php83:
-	@echo "Testing Docker image for govcmstesting/ci with PHP 8.3"
-	docker run --rm govcmstesting/ci:$(VERSION)-php8.3-apache php -v
-
-# Targets for pushing the images with multi-platform support
-push-php81: buildx-setup
-	@echo "Pushing Docker image for govcmstesting/tests with PHP 8.1"
-	docker buildx build --push --build-arg PHP_VERSION=8.1 --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 -t govcmstesting/tests:$(VERSION)-php8.1 -t govcmstesting/tests:latest-php8.1 -f Dockerfile .
-
-push-php82: buildx-setup
-	@echo "Pushing Docker image for govcmstesting/tests with PHP 8.2"
-	docker buildx build --push --build-arg PHP_VERSION=8.2 --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 -t govcmstesting/tests:$(VERSION)-php8.2 -t govcmstesting/tests:latest-php8.2 -f Dockerfile .
-
-push-php83: buildx-setup
-	@echo "Pushing Docker image for govcmstesting/tests with PHP 8.3"
-	docker buildx build --push --build-arg PHP_VERSION=8.3 --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8 -t govcmstesting/tests:$(VERSION)-php8.3 -t govcmstesting/tests:latest-php8.3 -f Dockerfile .
-
-push-ci-php81: buildx-setup
-	@echo "Pushing Docker image for govcmstesting/ci with PHP 8.1"
-	docker buildx build --push --build-arg PHP_VERSION=8.1 --platform linux/amd64,linux/arm64 -t govcmstesting/ci:$(VERSION)-php8.1-apache -f Dockerfile.ci .
-
-push-ci-php82: buildx-setup
-	@echo "Pushing Docker image for govcmstesting/ci with PHP 8.2"
-	docker buildx build --push --build-arg PHP_VERSION=8.2 --platform linux/amd64,linux/arm64 -t govcmstesting/ci:$(VERSION)-php8.2-apache -f Dockerfile.ci .
-
-push-ci-php83: buildx-setup
-	@echo "Pushing Docker image for govcmstesting/ci with PHP 8.3"
-	docker buildx build --push --build-arg PHP_VERSION=8.3 --platform linux/amd64,linux/arm64 -t govcmstesting/ci:$(VERSION)-php8.3-apache -f Dockerfile.ci .
+# Apply make-targets for tests and ci with architectures
+$(eval $(call make-targets,tests,,, $(ARCHS)))
+$(eval $(call make-targets,ci,-apache,.ci, $(CI_ARCHS)))
 
 # Aggregate targets
-php: build-php81 build-php82 build-php83 test-php81 test-php82 test-php83
-ci: build-ci-php81 build-ci-php82 build-ci-php83 test-ci-php81 test-ci-php82 test-ci-php83
-all: php ci
+tests: $(foreach v,$(PHP_VERSIONS),build-tests-$(v) test-tests-$(v))
+ci: $(foreach v,$(PHP_VERSIONS),build-ci-$(v) test-ci-$(v))
+all: tests ci
 
-# Targets for building, testing, and pushing images
-release-php81: build-php81 test-php81 push-php81
-release-php82: build-php82 test-php82 push-php82
-release-php83: build-php83 test-php83 push-php83
-release-ci-php81: build-ci-php81 test-ci-php81 push-ci-php81
-release-ci-php82: build-ci-php82 test-ci-php82 push-ci-php82
-release-ci-php83: build-ci-php83 test-ci-php83 push-ci-php83
-release-php: release-php81 release-php82 release-php83
-release-ci: release-ci-php81 release-ci-php82 release-ci-php83
-release-all: release-php release-ci
+# Release targets
+release-ci: $(foreach v,$(PHP_VERSIONS),release-ci-$(v))
+release-tests: $(foreach v,$(PHP_VERSIONS),release-tests-$(v))
+release-all: release-ci release-tests
+
+# Individual release targets
+define release-target
+release-$(1)-$(2): build-$(1)-$(2) test-$(1)-$(2) push-$(1)-$(2)
+endef
+
+$(foreach type,tests ci,$(foreach v,$(PHP_VERSIONS),$(eval $(call release-target,$(type),$(v)))))
+
+# Examples
+examples:
+	@echo "Examples of how to use this Makefile:"
+	@echo "1. Build PHP 8.3 image for tests:"
+	@echo "   make build-tests-8.3"
+	@echo "2. Test CI image for PHP 8.3:"
+	@echo "   make test-ci-8.3"
+	@echo "3. Push PHP 8.3 image for tests:"
+	@echo "   make push-tests-8.3"
+	@echo "4. Build all PHP versions for tests and CI:"
+	@echo "   make all"
+	@echo "5. Release all images:"
+	@echo "   make release-all"
+	@echo "6. Build, test, and push PHP 8.3 CI image:"
+	@echo "   make release-ci-8.3"
+	@echo "7. Build, test, and push PHP 8.3 tests image:"
+	@echo "   make release-tests-8.3"
+	@echo "8. Release a specific version (e.g., v1.0.0) for PHP 8.3 CI image:"
+	@echo "   make VERSION=1.0.0 release-ci-8.3"
+	@echo "9. Release a specific version (e.g., v1.0.0) for PHP 8.3 tests image:"
+	@echo "   make VERSION=1.0.0 release-tests-8.3"
+	@echo "10. Release a specific version (e.g., v1.0.0) for all images:"
+	@echo "   make VERSION=1.0.0 release-all"

@@ -1,4 +1,7 @@
 services:
+  ##########################################
+  # registry: The Docker image registry service
+  ##########################################
   registry:
     image: registry:2
     container_name: registry
@@ -125,6 +128,21 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  ##########################################
+  # cypress: Cypress testing service
+  ##########################################
+  cypress:
+    image: cypress/included
+    container_name: cypress
+    volumes:
+      - ./cy:/e2e
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    networks:
+      - internal
+    environment:
+      - CYPRESS_baseUrl=http://govcms
+    entrypoint: [ "npx", "cypress", "run", "--project", "/e2e", "--spec", "/e2e/cypress/e2e/4-ui/*.cy.js" ]
 
 volumes:
   registry:

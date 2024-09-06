@@ -1,10 +1,11 @@
+---
 name: GovCMS CI Tests - PHPUnit
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
   pull_request:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
 
 permissions:
   contents: read
@@ -25,4 +26,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run PHPUnit tests
         run: |
-           docker exec ${{ job.services.web.id }} govcms-phpunit --testdox --testsuite govcms-integration
+          docker exec ${{ job.services.web.id }} \
+            govcms-phpunit --testdox --testsuite govcms-integration

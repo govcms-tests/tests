@@ -1,0 +1,41 @@
+---
+name: Generate test documentation
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches: ["3.x-develop"]
+    paths: ['phpunit/**']
+  pull_request:
+    branches: ["3.x-develop"]
+    paths: ['phpunit/**']
+
+jobs:
+  generate-docs:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{secrets.BYPASS_BRANCH_PROTECTION}}
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Run PHP script to generate Markdown
+        run: |
+          php phpunit/extract.php \
+            ${{ github.workspace }}/phpunit/integration/GovCMS
+
+      - name: Commit and push changes
+        run: |
+          mkdir -p ${{ github.workspace }}/phpunit/docs
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@github.com'
+          git add ${{ github.workspace }}/phpunit/docs/
+          if ! git diff-index --quiet HEAD; then
+          git commit -m "[skip ci] Update generated docs"
+          git push
+          fi

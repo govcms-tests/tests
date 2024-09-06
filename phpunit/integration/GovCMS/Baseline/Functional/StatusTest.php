@@ -1,6 +1,6 @@
 <?php
 
-namespace GovCMS\Tests\Baseline\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Baseline\Functional;
 
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;

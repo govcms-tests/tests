@@ -1,10 +1,11 @@
+---
 name: GovCMS CI Tests - Cypress
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
   pull_request:
-    branches: [ "3.x-develop" ]
+    branches: ["3.x-develop"]
 
 permissions:
   contents: read
@@ -24,11 +25,19 @@ jobs:
     steps:
       - name: Install GovCMS site
         run: |
-          docker exec ${{ job.services.web.id }} drush site-install -y govcms --db-url=sqlite://sites/default/files/.ht.sqlite --site-name='GovCMS' --account-pass=password install_configure_form.enable_update_status_emails=NULL install_configure_form.enable_update_status_module=NULL || true
+          docker exec ${{ job.services.web.id }} drush site-install -y govcms \
+            --db-url=sqlite://sites/default/files/.ht.sqlite \
+            --site-name='GovCMS' \
+            --account-pass=password \
+            install_configure_form.enable_update_status_emails=NULL \
+            install_configure_form.enable_update_status_module=NULL || true
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           cd cy && npm ci
       - name: Run Cypress tests
+        # yamllint disable rule:line-length
         run: |
-          cd cy && npx cypress run --config baseUrl=http://localhost --env drupalDrushCmdLine="docker exec ${{ job.services.web.id }} drush --root=/app/web %command" --spec "cypress/e2e/**/*.cy.js,!cypress/e2e/3-modules/module_versions.cy.js"
+          cd cy && npx cypress run \
+            --config baseUrl=http://localhost \
+            --env drupalDrushCmdLine="docker exec ${{ job.services.web.id }} drush --root=/app/web %command" --spec "cypress/e2e/**/*.cy.js,!cypress/e2e/3-modules/module_versions.cy.js"

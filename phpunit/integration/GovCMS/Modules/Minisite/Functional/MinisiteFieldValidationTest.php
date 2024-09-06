@@ -1,6 +1,6 @@
 <?php
 
-namespace GovCMS\Tests\Modules\Minisite\Functional;
+namespace GovCMS\Tests\Integration\GovCMS\Modules\Minisite\Functional;
 
 use Drupal\Tests\minisite\Functional\FieldValidationTest as BaseFieldValidationTest;
 

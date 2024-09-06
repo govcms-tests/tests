@@ -1,14 +1,6 @@
 #!/bin/sh
 
-# Wait for packeton service to be up
-until curl -s http://packeton:80/packages.json -o /dev/null; do
-  echo "Waiting for packeton service..."
-  sleep 5
-done
-
-echo "Packeton service is up!"
-
-# Rebuild and optimize Composer autoload
-composer dump-autoload -o
+# Require the SimpleSAMLphp Auth module for Drupal using Composer
+composer require 'drupal/simplesamlphp_auth:^4.0'
 
 echo "Composer autoload rebuilt and optimized!"
