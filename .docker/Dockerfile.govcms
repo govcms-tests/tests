@@ -33,7 +33,7 @@ WORKDIR /app
 COPY --chown=govcms:govcms --from=govcms /app /app
 
 # Add the install.php file from the Drupal repository
-ADD --chown=govcms:govcms https://github.com/drupal/drupal/raw/10.3.x/core/install.php /app/web/core/install.php
+ADD --chown=govcms:govcms https://github.com/drupal/drupal/raw/11.1.x/core/install.php /app/web/core/install.php
 
 # Copy SSO configuration files
 COPY .docker/sso/config /app/custom/sso/config
