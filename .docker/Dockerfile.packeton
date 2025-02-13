@@ -1,4 +1,0 @@
-FROM packeton/packeton:latest
-
-# Copy mirror.yaml to the appropriate location inside the container
-COPY config/mirrors.yaml /var/www/packagist/config/packages/mirrors.yaml
