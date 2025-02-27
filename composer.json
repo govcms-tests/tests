@@ -4,7 +4,9 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "behat/behat": "^3",
+        "behat/mink-goutte-driver": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "drevops/behat-format-progress-fail": "^1.0",
         "drevops/behat-screenshot": "^1.2",
         "drevops/behat-steps": "^2",
@@ -15,6 +17,8 @@
         "phploc/phploc": "^7.0",
         "phpmd/phpmd": "^2.10",
         "sebastian/phpcpd": "^6.0"
+        "symfony/dependency-injection": "^6",
+        "symfony/event-dispatcher": "^6"
     },
     "config": {
         "allow-plugins": {
