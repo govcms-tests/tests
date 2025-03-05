@@ -6,7 +6,6 @@
         "behat/behat": "^3",
         "behat/mink-goutte-driver": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "drevops/behat-format-progress-fail": "^1.0",
         "drevops/behat-screenshot": "^1.2",
         "drevops/behat-steps": "^2",
