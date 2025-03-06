@@ -18,7 +18,7 @@
         "phploc/phploc": "^7.0",
         "phpmd/phpmd": "^2.10",
         "symfony/dependency-injection": "^6",
-        "symfony/event-dispatcher": "^6"
+        "symfony/event-dispatcher": "^7"
     },
     "config": {
         "allow-plugins": {
