@@ -11,7 +11,7 @@ COPY --from=govcms/govcms:10.x-edge /app /app
 COPY --from=govcmstesting/tests /tests /app/tests
 
 # Stage 2: Final image
-FROM govcmstesting/php:8.1-apache
+FROM govcmstesting/php:8.3-apache
 
 # Copy contents from the "base" stage to "/app/"
 COPY --from=base /app /app
