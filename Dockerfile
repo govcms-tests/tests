@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM govcmstesting/php:8.1-cli as builder
+FROM govcmstesting/php:8.3-cli as builder
 
 # Set the working directory
 WORKDIR /tests
