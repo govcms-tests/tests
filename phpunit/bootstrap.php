@@ -7,8 +7,6 @@
  * @see phpunit.xml
  */
 
-use Drupal\TestTools\PhpUnitCompatibility\ClassWriter;
-
 /**
  * Finds all valid extension directories recursively within a given directory.
  *
@@ -165,8 +163,6 @@ function drupal_phpunit_populate_class_loader() {
 // Do class loader population.
 $loader = drupal_phpunit_populate_class_loader();
 class_alias('\Drupal\Tests\DocumentElement', '\Behat\Mink\Element\DocumentElement', TRUE);
-
-ClassWriter::mutateTestBase($loader);
 
 // Set sane locale settings, to ensure consistent string, dates, times and
 // numbers handling.
