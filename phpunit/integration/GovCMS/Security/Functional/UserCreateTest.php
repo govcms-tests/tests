@@ -52,7 +52,7 @@ class UserCreateTest extends BrowserTestBase {
     $this->drupalGet('admin/people/create');
     $this->submitForm($edit, 'Create new account');
     $this->assertSession()->pageTextContains('The password does not satisfy the password policies.');
-    $this->assertSession()->pageTextContains('Password length must be at least 14 characters.');
+    $this->assertSession()->pageTextContains('Password length must be at least 15 characters.');
   }
 
 }
