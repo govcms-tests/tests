@@ -8,7 +8,7 @@ use GovCMS\Tests\Integration\GovCMS\Baseline\Functional\GovCMSTestBase;
 
 class PasswordPolicyTest extends GovCMSTestBase {
 
-    const MSG_LENGTH_ERROR = 'Password length must be at least 14 characters.';
+    const MSG_LENGTH_ERROR = 'Password length must be at least 15 characters.';
 
     const MSG_CHARACTER_TYPE_ERROR = 'Password must contain at least 3 types of characters from'
         . ' the following character types: lowercase letters, uppercase letters,'
