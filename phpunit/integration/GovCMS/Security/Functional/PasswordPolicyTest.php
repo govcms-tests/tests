@@ -41,7 +41,7 @@ class PasswordPolicyTest extends GovCMSTestBase {
     }
 
     public function testMinimumPasswordLength(): void {
-        $this->createUserWithPassword('Aa12.');
+        $this->createUserWithPassword('Aa1.');
         $this->assertSession()->responseContains(self::MSG_LENGTH_ERROR);
 
         // Test that meeting the length requirement now passes the test.
