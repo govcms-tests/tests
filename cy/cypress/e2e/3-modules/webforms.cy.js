@@ -5,7 +5,7 @@ const formTitle = randString(10)
 describe('User can create webforms with file attachment fields', () => {
     it('Set up the webform module', () => {
         // Ensure no existing files
-        cy.execDrush('entity:delete file')
+        cy.execDrush('entity:delete file -y')
         // Install
         cy.execDrush('-y pm:install webform, webform_node')
     })
