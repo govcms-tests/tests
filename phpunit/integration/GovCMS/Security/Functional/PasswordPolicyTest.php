@@ -8,7 +8,7 @@ use GovCMS\Tests\Integration\GovCMS\Baseline\Functional\GovCMSTestBase;
 
 class PasswordPolicyTest extends GovCMSTestBase {
 
-    const MSG_LENGTH_ERROR = 'Password length must be at least 14 characters.';
+    const MSG_LENGTH_ERROR = 'Password length must be at least 15 characters.';
 
     const MSG_CHARACTER_TYPE_ERROR = 'Password must contain at least 3 types of characters from'
         . ' the following character types: lowercase letters, uppercase letters,'
@@ -45,26 +45,26 @@ class PasswordPolicyTest extends GovCMSTestBase {
         $this->assertSession()->responseContains(self::MSG_LENGTH_ERROR);
 
         // Test that meeting the length requirement now passes the test.
-        $this->createUserWithPassword('Aa1.12345678910');
+        $this->createUserWithPassword('Aa12.12345678910');
         $this->assertUserCreation();
     }
 
     public function testMinimumNumberCharacterTypes(): void {
-        $this->createUserWithPassword('12345678901234');
+        $this->createUserWithPassword('123456789012345');
         $this->assertSession()->responseContains(self::MSG_CHARACTER_TYPE_ERROR);
 
         // Test only two character types.
-        $this->createUserWithPassword('1234567890123A');
+        $this->createUserWithPassword('12345678901234A');
         $this->assertSession()->responseContains(self::MSG_CHARACTER_TYPE_ERROR);
 
         // Test three character types.
-        $this->createUserWithPassword('123456789012Aa');
+        $this->createUserWithPassword('1234567890123Aa');
         $this->assertUserCreation();
     }
 
 
     public function testResetingToPreviousPassword() {
-        $this->createUserWithPassword('123456789012Aa');
+        $this->createUserWithPassword('1234567890123Aa');
         $this->assertUserCreation();
 
         $testUser = user_load_by_name('test-user');
@@ -72,8 +72,8 @@ class PasswordPolicyTest extends GovCMSTestBase {
 
         $this->drupalGet("user/{$id}/edit");
         $edit = [
-            'pass[pass1]' => '123456789012Aa',
-            'pass[pass2]' => '123456789012Aa',
+            'pass[pass1]' => '1234567890123Aa',
+            'pass[pass2]' => '1234567890123Aa',
         ];
         $this->submitForm($edit, 'Save');
         $this->assertSession()->responseContains('The password does not satisfy the password policies.');
