@@ -41,7 +41,7 @@ describe('Search functionality works as expected', () => {
 
     it('Clean up', () => {
         cy.uninstall('search')
-        cy.execDrush('entity:delete node')
+        cy.execDrush('entity:delete node -y')
     })
 
 })
