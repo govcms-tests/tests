@@ -79,9 +79,9 @@ describe('User can create webforms with file attachment fields', () => {
 
 
     it('Clean up', () => {
-        cy.execDrush('entity:delete file')
-        cy.execDrush('entity:delete webform')
-        cy.execDrush('entity:delete node')
+        cy.execDrush('entity:delete file -y')
+        cy.execDrush('entity:delete webform -y')
+        cy.execDrush('entity:delete node -y')
         cy.execDrush('-y pm:uninstall webform_node')
         cy.execDrush('-y pm:uninstall webform')
         cy.execDrush('-y cset honeypot.settings time_limit 5')
