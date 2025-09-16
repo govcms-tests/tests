@@ -37,7 +37,7 @@ describe('Search functionality works as expected', () => {
         cy.get('#content #edit-keys').type('test')
         cy.get('#content #edit-submit').click()
         // Test blog should appear
-        cy.get('#content > section > div > div.item-list').contains(`${blogName}`)
+        cy.get('#content ol.node_search-results').contains(`${blogName}`)
     })
 
     it('Clean up', () => {
