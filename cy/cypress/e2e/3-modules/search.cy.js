@@ -4,7 +4,6 @@ const blogName = "test " + randString(10)
 
 describe('Search functionality works as expected', () => {
     it('Install search and set up dummy content', () => {
-        cy.install('search')
         // Create dummy content
         cy.drupalLogin()
         cy.visit('node/add/govcms_blog_article')
@@ -20,6 +19,7 @@ describe('Search functionality works as expected', () => {
         cy.getDrupal('edit-new-state').select('Published')
         cy.confirm()
         // Tell site to re-index search
+        cy.install('search')
         cy.visit('admin/config/search/pages')
         cy.getDrupal('edit-wipe').click()
         cy.visit('admin/config/system/cron')
