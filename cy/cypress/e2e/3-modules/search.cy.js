@@ -33,7 +33,7 @@ describe('Search functionality works as expected', () => {
     it('Check anonymous user can search', () => {
         // Search for blog.
         cy.visit('search')
-        cy.getDrupal('edit-keys').type('test')
+        cy.get('#content #edit-keys').type('test')
         cy.confirm()
         // Test blog should appear
         cy.get('#content > section > div > div.item-list').contains(`${blogName}`)
