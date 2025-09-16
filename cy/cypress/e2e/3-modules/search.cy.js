@@ -22,6 +22,7 @@ describe('Search functionality works as expected', () => {
         cy.install('search')
         cy.visit('admin/config/search/pages')
         cy.getDrupal('edit-wipe').click()
+        cy.confirm()
         cy.visit('admin/config/system/cron')
         cy.getDrupal('edit-run').click()
 
