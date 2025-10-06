@@ -7,7 +7,7 @@
         "behat/mink-goutte-driver": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "drevops/behat-format-progress-fail": "^1.0",
-        "drevops/behat-screenshot": "^1.2",
+        "drevops/behat-screenshot": "^2.2",
         "drevops/behat-steps": "^2.1",
         "drupal/coder": "^8.3",
         "drupal/drupal-extension": "^5.0",
