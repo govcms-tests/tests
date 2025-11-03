@@ -48,6 +48,18 @@ services:
             - data/
         - action: rebuild
           path: composer.json
+          
+  ##########################################
+  # mailhog: The mail capture service
+  ##########################################
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - internal
 
 volumes:
   modules:
