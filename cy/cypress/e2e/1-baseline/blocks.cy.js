@@ -20,11 +20,6 @@ describe('Site admin can create a new block', () => {
     it('Create new block', () => {
         cy.visit(`block/add/${testBlockTypeName}?destination=/admin/content/block`)
         cy.get('#edit-info-0-value').type(testBlockName)
-        // Type into CKEditor, cy.type() doesnt currently work with CKEditor
-        cy.get('.ck-content[contenteditable=true]').then(el => {
-            const editor = el[0].ckeditorInstance
-            editor.setData('Typing some stuff')
-        })
         cy.get('#edit-submit').click()
         cy.get('.messages-list__item').contains(`${testBlockTypeName} ${testBlockName} has been created.`)
     })
