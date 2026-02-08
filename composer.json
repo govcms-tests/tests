@@ -19,7 +19,7 @@
         "phpmd/phpmd": "^2.10",
         "phpunit/phpunit": "^9.6.13",
         "symfony/dependency-injection": "^6",
-        "symfony/event-dispatcher": "^6"
+        "symfony/event-dispatcher": "^7"
     },
     "config": {
         "allow-plugins": {
