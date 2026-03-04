@@ -59,7 +59,7 @@ class HttpavServiceTest extends BrowserTestBase {
    */
   #[\Override]
   protected function tearDown(): void {
-    // Delete all test file.
+    // Delete test file.
     unlink($this->testFile);
 
     parent::tearDown();
