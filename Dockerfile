@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-ARG PHP_VERSION=8.3
+ARG PHP_VERSION=8.4
 FROM govcmstesting/php:${PHP_VERSION}-cli AS builder
 
 # Set the working directory
