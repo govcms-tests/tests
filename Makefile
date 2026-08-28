@@ -4,7 +4,7 @@
 VERSION ?= latest
 
 # PHP versions
-PHP_VERSIONS := 8.1 8.2 8.3
+PHP_VERSIONS := 8.1 8.2 8.3 8.4
 
 # Supported architectures
 ARCHS := linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8
@@ -61,23 +61,23 @@ $(foreach type,tests ci,$(foreach v,$(PHP_VERSIONS),$(eval $(call release-target
 # Examples
 examples:
 	@echo "Examples of how to use this Makefile:"
-	@echo "1. Build PHP 8.3 image for tests:"
-	@echo "   make build-tests-8.3"
-	@echo "2. Test CI image for PHP 8.3:"
-	@echo "   make test-ci-8.3"
-	@echo "3. Push PHP 8.3 image for tests:"
-	@echo "   make push-tests-8.3"
+	@echo "1. Build PHP 8.4 image for tests:"
+	@echo "   make build-tests-8.4"
+	@echo "2. Test CI image for PHP 8.4:"
+	@echo "   make test-ci-8.4"
+	@echo "3. Push PHP 8.4 image for tests:"
+	@echo "   make push-tests-8.4"
 	@echo "4. Build all PHP versions for tests and CI:"
 	@echo "   make all"
 	@echo "5. Release all images:"
 	@echo "   make release-all"
-	@echo "6. Build, test, and push PHP 8.3 CI image:"
-	@echo "   make release-ci-8.3"
-	@echo "7. Build, test, and push PHP 8.3 tests image:"
-	@echo "   make release-tests-8.3"
-	@echo "8. Release a specific version (e.g., v1.0.0) for PHP 8.3 CI image:"
-	@echo "   make VERSION=1.0.0 release-ci-8.3"
-	@echo "9. Release a specific version (e.g., v1.0.0) for PHP 8.3 tests image:"
-	@echo "   make VERSION=1.0.0 release-tests-8.3"
+	@echo "6. Build, test, and push PHP 8.4 CI image:"
+	@echo "   make release-ci-8.4"
+	@echo "7. Build, test, and push PHP 8.4 tests image:"
+	@echo "   make release-tests-8.4"
+	@echo "8. Release a specific version (e.g., v1.0.0) for PHP 8.4 CI image:"
+	@echo "   make VERSION=1.0.0 release-ci-8.4"
+	@echo "9. Release a specific version (e.g., v1.0.0) for PHP 8.4 tests image:"
+	@echo "   make VERSION=1.0.0 release-tests-8.4"
 	@echo "10. Release a specific version (e.g., v1.0.0) for all images:"
 	@echo "   make VERSION=1.0.0 release-all"
