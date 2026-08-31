@@ -16,7 +16,7 @@ jobs:
 
     services:
       web:
-        image: govcmstesting/ci:latest-php8.3-apache
+        image: govcmstesting/ci:latest-php8.4-apache
         ports:
           - 80:80
         volumes:

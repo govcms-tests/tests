@@ -3,7 +3,7 @@ version: '2.1'
 jobs:
   phpunit:
     docker:
-      - image: 'govcmstesting/ci:latest-php8.3-apache'
+      - image: 'govcmstesting/ci:latest-php8.4-apache'
         command: ["apache2-foreground"]
     working_directory: /app
     steps:
@@ -21,7 +21,7 @@ jobs:
 
   cypress:
     docker:
-      - image: 'govcmstesting/ci:latest-php8.3-apache'
+      - image: 'govcmstesting/ci:latest-php8.4-apache'
         command: ["apache2-foreground"]
     working_directory: /app
     steps:
