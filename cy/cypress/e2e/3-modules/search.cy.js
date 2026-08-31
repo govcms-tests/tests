@@ -19,7 +19,7 @@ describe('Search functionality works as expected', () => {
         cy.getDrupal('edit-new-state').select('Published')
         cy.confirm()
         // Tell site to re-index search
-        cy.install('search')
+        cy.install('search,search_node')
         cy.visit('admin/config/search/pages')
         cy.getDrupal('edit-wipe').click()
         cy.visit('admin/config/system/cron')
@@ -40,7 +40,7 @@ describe('Search functionality works as expected', () => {
     })
 
     it('Clean up', () => {
-        cy.uninstall('search')
+        cy.uninstall('search,search_node')
         cy.execDrush('entity:delete node -y')
     })
 
