@@ -8,7 +8,7 @@
         "drevops/behat-format-progress-fail": "^1.0",
         "drevops/behat-screenshot": "^1.2",
         "drevops/behat-steps": "^2.1",
-        "drupal/coder": "^8.3",
+        "drupal/coder": "^9.0",
         "drupal/drupal-extension": "^5.0",
         "mglaman/drupal-check": "^1.4",
         "palantirnet/drupal-rector": "^0.20",
