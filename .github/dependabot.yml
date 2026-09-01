@@ -7,7 +7,7 @@ updates:
       time: '07:00'
       timezone: Australia/Sydney
     open-pull-requests-limit: 15
-    target-branch: 3.x-develop
+    target-branch: 4.x-develop
     reviewers:
       - pandaskii
   - package-ecosystem: npm
@@ -16,6 +16,6 @@ updates:
       interval: daily
       time: '07:00'
       timezone: Australia/Sydney
-    target-branch: 3.x-develop
+    target-branch: 4.x-develop
     reviewers:
       - pandaskii
