@@ -7,6 +7,8 @@ ARG DRUPAL_VERSION=11.4.x
 FROM govcms/govcms:${GOVCMS_VERSION} AS govcms
 FROM govcmstesting/ci:latest-php${PHP_VERSION}-apache
 
+ARG DRUPAL_VERSION
+
 USER root
 
 # Install ssmtp and clean up
