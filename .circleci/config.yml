@@ -47,6 +47,7 @@ jobs:
           command: |
             cd tests/cy
             npm ci
+            npx cypress install
       - run:
           name: Run Cypress tests
           command: |
