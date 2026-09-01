@@ -1,7 +1,7 @@
 # Set the PHP and GovCMS versions as arguments
 ARG PHP_VERSION=8.4
 ARG GOVCMS_VERSION=11.x-latest
-ARG DRUPAL_VERSION=11.4.5
+ARG DRUPAL_VERSION=11.4.x
 
 # Stage 1: Web image
 FROM govcms/govcms:${GOVCMS_VERSION} AS govcms
@@ -33,7 +33,7 @@ WORKDIR /app
 COPY --chown=govcms:govcms --from=govcms /app /app
 
 # Add the install.php file from the Drupal repository
-ADD --chown=govcms:govcms https://github.com/drupal/drupal/raw/11.1.x/core/install.php /app/web/core/install.php
+ADD --chown=govcms:govcms https://github.com/drupal/drupal/raw/${DRUPAL_VERSION}/core/install.php /app/web/core/install.php
 
 # Copy SSO configuration files
 COPY .docker/sso/config /app/custom/sso/config
