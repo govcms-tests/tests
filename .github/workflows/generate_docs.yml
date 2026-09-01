@@ -3,10 +3,10 @@ name: Generate test documentation
 
 on:  # yamllint disable-line rule:truthy
   push:
-    branches: ["3.x-develop"]
+    branches: ["4.x-develop"]
     paths: ['phpunit/**']
   pull_request:
-    branches: ["3.x-develop"]
+    branches: ["4.x-develop"]
     paths: ['phpunit/**']
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
 
       - name: Run PHP script to generate Markdown
         run: |

@@ -3,9 +3,9 @@ name: GovCMS CI Tests - Cypress
 
 on:  # yamllint disable-line rule:truthy
   push:
-    branches: ["3.x-develop"]
+    branches: ["4.x-develop"]
   pull_request:
-    branches: ["3.x-develop"]
+    branches: ["4.x-develop"]
 
 permissions:
   contents: read
@@ -16,7 +16,7 @@ jobs:
 
     services:
       web:
-        image: govcmstesting/ci:latest-php8.3-apache
+        image: govcmstesting/ci:latest-php8.4-apache
         ports:
           - 80:80
         volumes:
