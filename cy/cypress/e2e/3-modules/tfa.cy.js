@@ -14,34 +14,28 @@ describe('Check TFA setup', () => {
         cy.visit('admin/config/system/keys')
         cy.visit('admin/config/system/keys/add')
         cy.get('input[name="label"]').type(testKey)
-        // For some reason the site needs time here otherwise an error is thrown.
-        // Something to do with the verification of #edit-label being machine-readable.
-        cy.wait(500)
         cy.get('select[name="key_type"]').select('encryption')
         cy.get('select[name="key_type_settings[key_size]"]').select('256')
         cy.get('[data-drupal-selector="edit-key-provider"]').select('config')
         cy.get('select[name="key_provider"]').select('config')
         cy.get('input[name="key_input_settings[key_value]"]').type(encryption_profile_key)
         cy.get('input[name="key_input_settings[base64_encoded]"]').check()
-        cy.get('input[name="op').submit()
+        cy.get('input[name="op"]').click()
         cy.get('.responsive-enabled tbody tr').eq(0)
           .find('td').eq(0)
-          .should('have.text', '${testKey}');
+          .should('have.text', `${testKey}`);
     })
 
     it('Create encryption profile', () => {
         cy.drupalLogin()
         cy.visit('admin/config/system/encryption/profiles/add')
         cy.get('input[name="label"]').type(testProfile)
-        cy.wait(250)
         cy.get('select[name="encryption_method"]').select('Authenticated AES (Real AES)')
-        cy.wait(250)
         cy.get('select[name="encryption_key"]').select(testKey)
-        cy.wait(250)
-        cy.get('input[name="op').submit()
+        cy.get('input[name="op"]').click()
         cy.get('.responsive-enabled tbody tr').eq(0)
           .find('td').eq(0)
-          .should('have.text', '${testProfile}');
+          .should('have.text', `${testProfile}`);
     })
 
     it('Check user is not asked to set up TFA', () => {
