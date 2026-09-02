@@ -28,11 +28,11 @@ describe('Check TFA setup', () => {
     it('Create encryption profile', () => {
         cy.drupalLogin()
         cy.visit('admin/config/system/encryption/profiles/add')
-        cy.get('input[name="label"]').type(testProfile).type(testProfile).blur();
-        cy.get('.machine-name-value', { timeout: 5000 }).should('be.visible');
-        cy.get('select[name="encryption_method"]')
-          .should('be.visible')
-          .select('Authenticated AES (Real AES)')
+        cy.get('input[name="label"]').type(testProfile).type(testProfile).blur()
+        cy.get('.machine-name-value', { timeout: 5000 }).should('be.visible')
+        cy.intercept('POST', '**/admin/config/system/encryption/profiles/add**').as('ajaxFormRefresh')
+        cy.get('select[name="encryption_method"]').select('Authenticated AES (Real AES)')
+        cy.wait('@ajaxFormRefresh');
         cy.get('select[name="encryption_key"]')
           .should('be.visible')
           .and('contain', testKey) 
