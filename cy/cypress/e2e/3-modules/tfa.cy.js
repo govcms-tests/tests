@@ -30,7 +30,7 @@ describe('Check TFA setup', () => {
         cy.visit('admin/config/system/encryption/profiles/add')
         cy.get('input[name="label"]').type(testProfile)
         cy.get('select[name="encryption_method"]').select('Authenticated AES (Real AES)')
-        cy.get('select[name="encryption_key"]').select(testKey)
+        cy.get('select[name="encryption_key"]').should('be.visible').select(testKey)
         cy.get('input[name="op"]').click()
         cy.get('.responsive-enabled tbody tr').eq(0)
           .find('td').eq(0)
