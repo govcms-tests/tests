@@ -16,7 +16,7 @@ describe('Site admin can create a new block', () => {
         cy.get('#edit-submit').click()
         cy.get('.messages-list__item tbody tr').eq(1)
           .find('td').eq(0)
-          .should('have.text', ${testBlockTypeName});
+          .should('have.text', `${testBlockTypeName}`);
     })
 
     it('Create new block', () => {
