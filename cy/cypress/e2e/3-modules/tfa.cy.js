@@ -22,7 +22,7 @@ describe('Check TFA setup', () => {
         cy.get('[data-drupal-selector="edit-key-provider"]').select('config')
         cy.get('select[name="key_provider"]').select('config')
         cy.get('input[name="key_input_settings[key_value]"]').type(encryption_profile_key)
-        cy.get('input[name="key_input_settings[base64_encoded]]').check()
+        cy.get('input[name="key_input_settings[base64_encoded]"]').check()
         cy.get('input[name="op').submit()
         cy.get('.responsive-enabled tbody tr').eq(0)
           .find('td').eq(0)
