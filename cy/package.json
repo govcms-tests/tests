@@ -16,6 +16,9 @@
     "eslint-plugin-chai-friendly": "^1.0.1",
     "eslint-plugin-cypress": "^3.4.0"
   },
+  "allowScripts": {
+    "cypress": true
+  },
   "homepage": "https://github.com/govcms-tests/tests#readme",
   "license": "MIT",
   "repository": {
