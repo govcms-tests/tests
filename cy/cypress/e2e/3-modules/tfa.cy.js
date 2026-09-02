@@ -11,7 +11,6 @@ describe('Check TFA setup', () => {
 
     it('Create encryption key', () => {
         cy.drupalLogin()
-        cy.visit('admin/config/system/keys')
         cy.visit('admin/config/system/keys/add')
         cy.get('input[name="label"]').type(testKey)
         cy.get('select[name="key_type"]').select('encryption')
