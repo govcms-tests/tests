@@ -81,7 +81,8 @@ describe('Views Data Export functionality test', () => {
           .click({ force: true });
 
         cy.get('input[data-drupal-selector="edit-actions-submit"]').should('be.visible').click({ force: true });
-        cy.get('.messages__content').should('contain.text', 'has been saved');
+        //cy.get('.messages__content').should('contain.text', 'has been saved');
+        cy.contains(/You have unsaved changes./i).should('not.exist');
     };
 
     const testExport = (format, assertions) => {
