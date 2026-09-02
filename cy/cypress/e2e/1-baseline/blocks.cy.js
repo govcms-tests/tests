@@ -14,7 +14,7 @@ describe('Site admin can create a new block', () => {
         cy.wait(500)
         cy.get('#edit-description').type('lorem ipsum')
         cy.get('#edit-submit').click()
-        cy.get('.messages-list__item tbody tr').eq(1)
+        cy.get('.responsive-enabled tbody tr').eq(1)
           .find('td').eq(0)
           .should('have.text', `${testBlockTypeName}`);
     })
