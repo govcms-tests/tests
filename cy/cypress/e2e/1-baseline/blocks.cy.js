@@ -14,8 +14,9 @@ describe('Site admin can create a new block', () => {
         cy.wait(500)
         cy.get('#edit-description').type('lorem ipsum')
         cy.get('#edit-submit').click()
-        cy.get('.messages-list__item', { timeout: 8000 }).should('exist');
-        cy.get('.messages-list__item').contains(`Block type ${testBlockTypeName} has been added.`)
+        cy.get('.messages-list__item tbody tr').eq(1)
+          .find('td').eq(0)
+          .should('have.text', ${testBlockTypeName});
     })
 
     it('Create new block', () => {
