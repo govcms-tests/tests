@@ -4,7 +4,7 @@ import {randString} from "../../support/commands";
 const testKey = randString(10);
 const testProfile = randString(10);
 const testUsername = randString(10);
-const encryption_profile_key = "DY+T5R9K09+pRy84wZvlF4PjrBzGEXcRDA/NEV6B8/I="
+const encryption_profile_key = "DY+T5R9K09+pRy84wZvlF4PjrBzGEXcRDA/NEV6B8/I=";
 
 
 describe('Check TFA setup', () => {
@@ -13,31 +13,35 @@ describe('Check TFA setup', () => {
         cy.drupalLogin()
         cy.visit('admin/config/system/keys')
         cy.visit('admin/config/system/keys/add')
-        cy.get('#edit-label').type(testKey)
+        cy.get('input[name="label"]').type(testKey)
         // For some reason the site needs time here otherwise an error is thrown.
         // Something to do with the verification of #edit-label being machine-readable.
         cy.wait(500)
-        cy.get('#edit-key-type').select('encryption')
-        cy.get('[data-drupal-selector="edit-key-type-settings-key-size"]').select('256')
+        cy.get('select[name="key_type"]').select('encryption')
+        cy.get('select[name="key_type_settings[key_size]"]').select('256')
         cy.get('[data-drupal-selector="edit-key-provider"]').select('config')
-        cy.get('[data-drupal-selector="edit-key-provider-settings-base64-encoded"]').check()
-        cy.get('[data-drupal-selector="edit-key-input-settings-key-value"]').type(encryption_profile_key)
-        cy.get('[data-drupal-selector="edit-key-input-settings-base64-encoded"]').check()
-        cy.get('#key-add-form').submit()
-        cy.get('.messages-list__item').contains(`The key ${testKey} has been added.`)
+        cy.get('select[name="key_provider"]').select('config')
+        cy.get('input[name="key_input_settings[key_value]"]').type(encryption_profile_key)
+        cy.get('input[name="key_input_settings[base64_encoded]]').check()
+        cy.get('input[name="op').submit()
+        cy.get('.responsive-enabled tbody tr').eq(0)
+          .find('td').eq(0)
+          .should('have.text', '${testKey}');
     })
 
     it('Create encryption profile', () => {
         cy.drupalLogin()
         cy.visit('admin/config/system/encryption/profiles/add')
-        cy.get('#edit-label').type(testProfile)
+        cy.get('input[name="label"]').type(testProfile)
         cy.wait(250)
-        cy.get('[data-drupal-selector="edit-encryption-method"]').select('Authenticated AES (Real AES)')
+        cy.get('select[name="encryption_method"]').select('Authenticated AES (Real AES)')
         cy.wait(250)
-        cy.get('[data-drupal-selector="edit-encryption-key"]').select(testKey)
+        cy.get('select[name="encryption_key"]').select(testKey)
         cy.wait(250)
-        cy.get('#edit-submit').click({force: true})
-        cy.get('.messages-list__item').contains(`Saved the ${testProfile} encryption profile.`)
+        cy.get('input[name="op').submit()
+        cy.get('.responsive-enabled tbody tr').eq(0)
+          .find('td').eq(0)
+          .should('have.text', '${testProfile}');
     })
 
     it('Check user is not asked to set up TFA', () => {
