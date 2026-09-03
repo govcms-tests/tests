@@ -87,7 +87,9 @@ describe('Check TFA setup', () => {
         cy.get('input[name="pass"]').type('password');
         cy.get('input[name="op"]').click();
         // Check user is prompted to set up TFA.
-        cy.get('messages--error.messages__container.messages__content').contains(`You are required to setup two-factor authentication.`);
+        cy.get('[data-drupal-selector="messages-container"]')
+          .find('.messages__content')
+          .should('contain.text', 'You are required to setup two-factor authentication');
     })
 
     it('Check user can set up TFA', () => {
@@ -100,13 +102,13 @@ describe('Check TFA setup', () => {
         cy.get('input[name="pass"]').type('password');
         cy.get('input[name="op"]').click();
         // Set up TFA
-        cy.get('messages--error.messages__container.messages__content').within(() => {
-            cy.get('a').click()
-        });
-        cy.get('[data-drupal-selector="edit-link"]').within(() => {
-            cy.get('a').click()
-        });
-        cy.get('[data-drupal-selector="edit-current-pass"]').type('password');
+        cy.get('[data-drupal-selector="messages-container"]')
+          .contains('a', 'setup two-factor authentication')
+          .click();
+        cy.get('ul[data-drupal-selector="edit-link"]')
+          .contains('a', 'Set up application')
+          .click();
+        cy.get('input[data-drupal-selector="edit-current-pass"]').type('passwordd');
         cy.get('input[name="op"]').click();
         cy.get('[data-drupal-selector="edit-seed"]').invoke('val').then((val) => {
             SECRET_KEY = val
