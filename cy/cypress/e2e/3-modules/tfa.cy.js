@@ -54,41 +54,40 @@ describe('Check TFA setup', () => {
         cy.visit('user')
         cy.get('input[name="name"]').type(`${testUsername}`);
         cy.get('input[name="pass"]').type('password');
-        cy.get('form.user-login-form').submit();
+        cy.get('input[name="op"]').click();
         // Check message is not there
         cy.get('h1.title.page-title')
-          .should('have.trimmed.text', `${testUsername}`)
+          .should('have.text', `${testUsername}`)
           .and('be.visible');
     })
 
     it('Set up TFA', () => {
-        cy.drupalLogin()
+        cy.drupalLogin();
         // Configure TFA settings
-        cy.execDrush('-y cset tfa.settings validation_skip 10')
+        cy.execDrush('-y cset tfa.settings validation_skip 10');
         // Enforce TFA set up for Content Author, Content Approver, and Site Admin roles.
-        cy.execDrush('-y cset tfa.settings required_roles.govcms_content_author govcms_content_author')
-        cy.execDrush('-y cset tfa.settings required_roles.govcms_content_approver govcms_content_approver')
-        cy.execDrush('-y cset tfa.settings required_roles.govcms_site_administrator govcms_site_administrator')
-        cy.execDrush('-y cset tfa.settings required_roles.authenticated authenticated')
+        cy.execDrush('-y cset tfa.settings required_roles.govcms_content_author govcms_content_author');
+        cy.execDrush('-y cset tfa.settings required_roles.govcms_content_approver govcms_content_approver');
+        cy.execDrush('-y cset tfa.settings required_roles.govcms_site_administrator govcms_site_administrator');
+        cy.execDrush('-y cset tfa.settings required_roles.authenticated authenticated');
         // Set Encryption profile
-        cy.execDrush(`-y cset tfa.settings encryption ${testProfile}`)
+        cy.execDrush(`-y cset tfa.settings encryption ${testProfile}`);
         // Enable TFA module.
-        cy.get('#toolbar-link-system-admin_config').click();
-        cy.get(':nth-child(1) > :nth-child(1) > .panel__content > .admin-list--panel > :nth-child(3) > .admin-item__title > .admin-item__link').click();
-        cy.get('[data-drupal-selector="edit-tfa-enabled"]').click()
-        cy.get('#edit-submit').click();
+        cy.visit('/admin/config/people/tfa');
+        cy.get('input[name="tfa_enabled"]').check();
+        cy.get('input[name="op"]').click();
     })
 
     it('Check new user is asked to enable TFA', () => {
         cy.clearCookies();
         cy.clearLocalStorage();
         // Log in as the new user.
-        cy.visit('user')
-        cy.get("#edit-name").type(`${testUsername}`)
-        cy.get("#edit-pass").type('password')
-        cy.get("#edit-submit").click()
+        cy.visit('user');
+        cy.get('input[name="name"]').type(`${testUsername}`);
+        cy.get('input[name="pass"]').type('password');
+        cy.get('input[name="op"]').click();
         // Check user is prompted to set up TFA.
-        cy.get('.messages.messages--error').contains(`You are required to setup two-factor authentication.`)
+        cy.get('messages--error.messages__container.messages__content').contains(`You are required to setup two-factor authentication.`);
     })
 
     it('Check user can set up TFA', () => {
@@ -96,40 +95,40 @@ describe('Check TFA setup', () => {
         // Login
         cy.clearCookies();
         cy.clearLocalStorage();
-        cy.visit('user')
-        cy.get("#edit-name").type(`${testUsername}`)
-        cy.get("#edit-pass").type('password')
-        cy.get("#edit-submit").click()
+        cy.visit('user');
+        cy.get('input[name="name"]').type(`${testUsername}`);
+        cy.get('input[name="pass"]').type('password');
+        cy.get('input[name="op"]').click();
         // Set up TFA
-        cy.get('.messages.messages--error').within(() => {
+        cy.get('messages--error.messages__container.messages__content').within(() => {
             cy.get('a').click()
-        })
+        });
         cy.get('[data-drupal-selector="edit-link"]').within(() => {
             cy.get('a').click()
-        })
-        cy.get('[data-drupal-selector="edit-current-pass"]').type('password')
-        cy.get('#edit-submit').click()
+        });
+        cy.get('[data-drupal-selector="edit-current-pass"]').type('password');
+        cy.get('input[name="op"]').click();
         cy.get('[data-drupal-selector="edit-seed"]').invoke('val').then((val) => {
             SECRET_KEY = val
             cy.log(SECRET_KEY)
             cy.task("generateOTP", SECRET_KEY).then(token => {
                 cy.get('[data-drupal-selector="edit-code"]').type(token)
             })
-        })
-        cy.get('[data-drupal-selector="edit-login"]').click()
+        });
+        cy.get('[data-drupal-selector="edit-login"]').click();
 
     })
 
     it('Clean up', () => {
         // Disable TFA.
-        cy.execDrush('-y cset tfa.settings enabled 0')
-        cy.drupalLogin()
+        cy.execDrush('-y cset tfa.settings enabled 0');
+        cy.drupalLogin();
         // Remove created key, which automatically deletes the created profile as well.
-        cy.visit(`admin/config/system/keys/manage/${testKey}/delete?destination=/admin/config/system/keys`)
-        cy.get('#edit-submit').click()
-        cy.get('.messages-list__item').contains(`The key ${testKey} has been deleted.`)
+        cy.visit(`admin/config/system/keys/manage/${testKey}/delete?destination=/admin/config/system/keys`);
+        cy.get('#edit-submit').click();
+        cy.get('.messages-list__item').contains(`The key ${testKey} has been deleted.`);
         // Remove user created for testing purposes
-        cy.execDrush(`-y user:cancel --delete-content ${testUsername}`)
+        cy.execDrush(`-y user:cancel --delete-content ${testUsername}`);
     })
 
 })
