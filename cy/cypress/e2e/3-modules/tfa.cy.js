@@ -117,7 +117,7 @@ describe('Check TFA setup', () => {
                 cy.get('[data-drupal-selector="edit-code"]').type(token)
             })
         });
-        cy.get('[data-drupal-selector="edit-login"]').click();
+        cy.get('input[name="op"]').click();
 
     })
 
