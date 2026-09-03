@@ -127,8 +127,14 @@ describe('Check TFA setup', () => {
         cy.drupalLogin();
         // Remove created key, which automatically deletes the created profile as well.
         cy.visit(`admin/config/system/keys/manage/${testKey}/delete?destination=/admin/config/system/keys`);
-        cy.get('#edit-submit').click();
-        cy.get('.messages-list__item').contains(`The key ${testKey} has been deleted.`);
+        cy.get('#edit-delete').click();
+        cy.wait('@openDeleteModal');
+        cy.contains('button', 'Delete')
+          .should('be.visible')
+          .click();
+        cy.get('.messages--status')
+          .should('be.visible')
+          .and('contain.text', `The key ${testKey} has been deleted.`);
         // Remove user created for testing purposes
         cy.execDrush(`-y user:cancel --delete-content ${testUsername}`);
     })
