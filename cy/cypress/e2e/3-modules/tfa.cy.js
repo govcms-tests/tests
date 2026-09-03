@@ -4,6 +4,7 @@ import {randString} from "../../support/commands";
 const testKey = randString(10);
 const testProfile = randString(10);
 const testUsername = randString(10);
+const testUserpwd = randString(10);
 const encryption_profile_key = "DY+T5R9K09+pRy84wZvlF4PjrBzGEXcRDA/NEV6B8/I=";
 
 
@@ -46,14 +47,14 @@ describe('Check TFA setup', () => {
     it('Check user is not asked to set up TFA', () => {
         cy.clearCookies();
         cy.clearLocalStorage();
-        cy.execDrush(`user:create ${testUsername} --password=password`);
+        cy.execDrush(`user:create ${testUsername} --password=${testUserpwd}`);
         cy.execDrush(`user:role:add govcms_content_author ${testUsername}`);
         cy.execDrush(`user:role:remove authenticated ${testUsername}`);
         cy.execDrush('role:perm:add govcms_content_author \'setup own tfa\'');
         // Log in as the new user.
         cy.visit('user')
         cy.get('input[name="name"]').type(`${testUsername}`);
-        cy.get('input[name="pass"]').type('password');
+        cy.get('input[name="pass"]').type(`${testUserpwd}`);
         cy.get('input[name="op"]').click();
         // Check message is not there
         cy.get('h1.title.page-title')
@@ -84,7 +85,7 @@ describe('Check TFA setup', () => {
         // Log in as the new user.
         cy.visit('user');
         cy.get('input[name="name"]').type(`${testUsername}`);
-        cy.get('input[name="pass"]').type('password');
+        cy.get('input[name="pass"]').type(`${testUserpwd}`);
         cy.get('input[name="op"]').click();
         // Check user is prompted to set up TFA.
         cy.get('[data-drupal-selector="messages-container"]')
@@ -99,7 +100,7 @@ describe('Check TFA setup', () => {
         cy.clearLocalStorage();
         cy.visit('user');
         cy.get('input[name="name"]').type(`${testUsername}`);
-        cy.get('input[name="pass"]').type('password');
+        cy.get('input[name="pass"]').type(`${testUserpwd}`);
         cy.get('input[name="op"][value="Log in"]').click();
         // Set up TFA
         cy.get('[data-drupal-selector="messages-container"]')
@@ -108,7 +109,7 @@ describe('Check TFA setup', () => {
         cy.get('ul[data-drupal-selector="edit-link"]')
           .contains('a', 'Set up application')
           .click();
-        cy.get('input[data-drupal-selector="edit-current-pass"]').type('passwordd');
+        cy.get('input[data-drupal-selector="edit-current-pass"]').type(`${testUserpwd}`);
         cy.get('input[name="op"][value="Confirm"]').click();
         cy.get('[data-drupal-selector="edit-seed"]').invoke('val').then((val) => {
             SECRET_KEY = val
@@ -127,11 +128,7 @@ describe('Check TFA setup', () => {
         cy.drupalLogin();
         // Remove created key, which automatically deletes the created profile as well.
         cy.visit(`admin/config/system/keys/manage/${testKey}/delete?destination=/admin/config/system/keys`);
-        cy.get('#edit-delete').click();
-        cy.wait('@openDeleteModal');
-        cy.contains('button', 'Delete')
-          .should('be.visible')
-          .click();
+        cy.get('#edit-submit[value="Delete"]').click();
         cy.get('.messages--status')
           .should('be.visible')
           .and('contain.text', `The key ${testKey} has been deleted.`);
