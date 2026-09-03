@@ -12,7 +12,7 @@ WORKDIR /app/
 
 # Set environment variables
 ENV PATH="${PATH}:/app/tests/vendor/bin:/app/vendor/bin:/app/bin" \
-    COMPOSER_NO_SECURITY_BLOCKING=1 \
+    COMPOSER_NO_BLOCKING=1 \
     SIMPLETEST_BASE_URL="http://localhost" \
     SIMPLETEST_DB="sqlite://sites/default/files/.ht.sqlite"
 
