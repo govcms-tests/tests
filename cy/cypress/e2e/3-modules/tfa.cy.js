@@ -10,52 +10,55 @@ const encryption_profile_key = "DY+T5R9K09+pRy84wZvlF4PjrBzGEXcRDA/NEV6B8/I=";
 describe('Check TFA setup', () => {
 
     it('Create encryption key', () => {
-        cy.drupalLogin()
-        cy.visit('admin/config/system/keys/add')
-        cy.get('input[name="label"]').type(testKey)
-        cy.get('select[name="key_type"]').select('encryption')
-        cy.get('select[name="key_type_settings[key_size]"]').select('256')
-        cy.get('[data-drupal-selector="edit-key-provider"]').select('config')
-        cy.get('select[name="key_provider"]').select('config')
-        cy.get('input[name="key_input_settings[key_value]"]').type(encryption_profile_key)
-        cy.get('input[name="key_input_settings[base64_encoded]"]').check()
-        cy.get('input[name="op"]').click()
+        cy.drupalLogin();
+        cy.visit('admin/config/system/keys/add');
+        cy.get('input[name="label"]').type(testKey);
+        cy.get('select[name="key_type"]').select('encryption');
+        cy.get('select[name="key_type_settings[key_size]"]').select('256');
+        cy.get('[data-drupal-selector="edit-key-provider"]').select('config');
+        cy.get('select[name="key_provider"]').select('config');
+        cy.get('input[name="key_input_settings[key_value]"]').type(encryption_profile_key);
+        cy.get('input[name="key_input_settings[base64_encoded]"]').check();
+        cy.get('input[name="op"]').click();
         cy.get('.responsive-enabled tbody tr').eq(0)
           .find('td').eq(0)
           .should('have.text', `${testKey}`);
     })
 
     it('Create encryption profile', () => {
-        cy.drupalLogin()
-        cy.visit('admin/config/system/encryption/profiles/add')
-        cy.get('input[name="label"]').type(testProfile).blur()
-        cy.get('.machine-name-value', { timeout: 5000 }).should('be.visible')
-        cy.intercept('POST', '**/admin/config/system/encryption/profiles/add**').as('ajaxFormRefresh')
-        cy.get('select[name="encryption_method"]').select('Authenticated AES (Real AES)')
+        cy.drupalLogin();
+        cy.visit('admin/config/system/encryption/profiles/add');
+        cy.get('input[name="label"]').type(testProfile).blur();
+        cy.get('.machine-name-value', { timeout: 5000 }).should('be.visible');
+        cy.intercept('POST', '**/admin/config/system/encryption/profiles/add**').as('ajaxFormRefresh');
+        cy.get('select[name="encryption_method"]').select('Authenticated AES (Real AES)');
         cy.wait('@ajaxFormRefresh');
         cy.get('select[name="encryption_key"]')
           .should('be.visible')
           .and('contain', testKey) 
-          .select(testKey)
-        cy.get('input[name="op"]').click()
+          .select(testKey);
+        cy.get('input[name="op"]').click();
         cy.get('.responsive-enabled tbody tr').eq(0)
           .find('td').eq(0)
           .should('have.text', `${testProfile}`);
     })
 
     it('Check user is not asked to set up TFA', () => {
-        cy.visit('user/logout')
-        cy.execDrush(`user:create ${testUsername} --password=password`)
-        cy.execDrush(`user:role:add govcms_content_author ${testUsername}`)
-        cy.execDrush(`user:role:remove authenticated ${testUsername}`)
-        cy.execDrush('role:perm:add govcms_content_author \'setup own tfa\'')
+        cy.clearCookies();
+        cy.clearLocalStorage();
+        cy.execDrush(`user:create ${testUsername} --password=password`);
+        cy.execDrush(`user:role:add govcms_content_author ${testUsername}`);
+        cy.execDrush(`user:role:remove authenticated ${testUsername}`);
+        cy.execDrush('role:perm:add govcms_content_author \'setup own tfa\'');
         // Log in as the new user.
         cy.visit('user')
-        cy.get("#edit-name").type(`${testUsername}`)
-        cy.get("#edit-pass").type('password')
-        cy.get("#edit-submit").click()
+        cy.get('input[name="name"]').type(`${testUsername}`);
+        cy.get('input[name="pass"]').type('password');
+        cy.get('form.user-login-form').submit();
         // Check message is not there
-        cy.get('.messages.messages--error').should('not.exist')
+        cy.get('h1.title.page-title')
+          .should('have.trimmed.text', `${testUsername}`)
+          .and('be.visible');
     })
 
     it('Set up TFA', () => {
@@ -77,7 +80,8 @@ describe('Check TFA setup', () => {
     })
 
     it('Check new user is asked to enable TFA', () => {
-        cy.visit('user/logout')
+        cy.clearCookies();
+        cy.clearLocalStorage();
         // Log in as the new user.
         cy.visit('user')
         cy.get("#edit-name").type(`${testUsername}`)
@@ -90,7 +94,8 @@ describe('Check TFA setup', () => {
     it('Check user can set up TFA', () => {
         let SECRET_KEY;
         // Login
-        cy.visit('user/logout')
+        cy.clearCookies();
+        cy.clearLocalStorage();
         cy.visit('user')
         cy.get("#edit-name").type(`${testUsername}`)
         cy.get("#edit-pass").type('password')
