@@ -100,7 +100,7 @@ describe('Check TFA setup', () => {
         cy.visit('user');
         cy.get('input[name="name"]').type(`${testUsername}`);
         cy.get('input[name="pass"]').type('password');
-        cy.get('input[name="op"]').click();
+        cy.get('input[name="op"][value="Log in"]').click();
         // Set up TFA
         cy.get('[data-drupal-selector="messages-container"]')
           .contains('a', 'setup two-factor authentication')
@@ -109,7 +109,7 @@ describe('Check TFA setup', () => {
           .contains('a', 'Set up application')
           .click();
         cy.get('input[data-drupal-selector="edit-current-pass"]').type('passwordd');
-        cy.get('input[name="op"]').click();
+        cy.get('input[name="op"][value="Confirm"]').click();
         cy.get('[data-drupal-selector="edit-seed"]').invoke('val').then((val) => {
             SECRET_KEY = val
             cy.log(SECRET_KEY)
@@ -117,7 +117,7 @@ describe('Check TFA setup', () => {
                 cy.get('[data-drupal-selector="edit-code"]').type(token)
             })
         });
-        cy.get('input[name="op"]').click();
+        cy.contains('input[name="op"]', 'Verify').click();
 
     })
 
