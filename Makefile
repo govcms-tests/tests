@@ -49,7 +49,7 @@ all: tests ci
 # Release targets
 release-ci: $(foreach v,$(PHP_VERSIONS),release-ci-$(v))
 release-tests: $(foreach v,$(PHP_VERSIONS),release-tests-$(v))
-release-all: release-ci release-tests
+release-all: release-tests release-ci
 
 # Individual release targets
 define release-target
