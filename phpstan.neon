@@ -2,7 +2,7 @@ parameters:
     level: 6
 
     paths:
-        - ..
+        - .
 
     fileExtensions:
         - php
@@ -16,9 +16,9 @@ parameters:
 
     excludePaths:
         analyseAndScan:
-            - ../tests/*
-            - ../vendor/*
-            - ../web/*
-            - ../bin/*
-            - ../node_modules/*
-            - ../.git/*
+            - tests/*
+            - vendor/*
+            - web/*
+            - bin/*
+            - node_modules/*
+            - .git/*
